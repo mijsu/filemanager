@@ -81,7 +81,7 @@
     <div id="folder-modal" class="modal">
         <div class="modal-content">
             <h2>Create New Folder</h2>
-            <input type="text" id="folder-name" placeholder="Enter folder name">
+            <input type="text" id="folder-name" placeholder="New Folder">
             <button onclick="createFolder()" class="create-folder-btn">Create Folder</button>
         </div>
     </div>
@@ -172,14 +172,22 @@ function closeModal() {
 
 // Create Folder function
 function createFolder() {
-    const folderName = document.getElementById("folder-name").value;
-    if (folderName) {
-        const folder = { name: folderName, id: Date.now(), encrypted: false, encryptionKey: null };
-        folders.push(folder);
-        renderFolders();
-        closeModal();  // Close the modal after creating the folder
+    let baseName = "New Folder";
+    let folderName = baseName;
+    let count = 1;
+
+    // Check if a folder with the same name exists
+    while (folders.some(folder => folder.name === folderName)) {
+        folderName = `${baseName} (${count})`;
+        count++;
     }
+
+    const folder = { name: folderName, id: Date.now(), encrypted: false, encryptionKey: null };
+    folders.push(folder);
+    renderFolders();
+    closeModal();  // Close the modal after creating the folder
 }
+
 
 // Render folders on the page
 function renderFolders() {
